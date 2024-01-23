@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Add manufacturer</title>
+</head>
+<body>
+<header>
+    <h1>Add new manufacturer</h1>
+</header>
+
+<form action="/balloons/manufacturers/add" method="POST">
+    <div>
+        <label for="name">manufacturer name</label>
+        <input type="text"
+               id="name"
+               name="name"
+               value=""
+               required
+               placeholder="Enter manufacturer name">
+    </div>
+    <div>
+        <label for="country">country</label>
+        <input type="text"
+               id="country"
+               name="country"
+               value=""
+               placeholder="country">
+    </div>
+    <div>
+        <label for="address">address</label>
+        <input type="text"
+               id="address"
+               name="address"
+               value=""
+               placeholder="address">
+    </div>
+
+    <button type="submit" >Submit</button>
+    <a type="button" href="/balloons/add-form">Back</a>
+</form>
+</body>
+</html>

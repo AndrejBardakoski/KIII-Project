@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Add balloon</title>
+</head>
+<body>
+<header>
+    <h1>Add or edit Balloon</h1>
+</header>
+
+<form action="/balloons/add" method="POST">
+    <div>
+        <label for="name">Balloon name</label>
+        <input type="text"
+               id="name"
+               name="name"
+               th:value="(${balloon} != null ? ${balloon.getName()} : '')"
+               required
+               placeholder="Enter balloon name">
+    </div>
+    <div>
+        <label for="desc">Description</label>
+        <input type="text"
+               id="desc"
+               name="desc"
+               th:value="(${balloon} != null ? ${balloon.getDescription()} : '')"
+               placeholder="Description">
+    </div>
+    <div>
+        <label>Manufacturer</label>
+        <select name="manufacturer" class="form-control">
+            <option th:if="${balloon} != null"
+                    th:selected="${balloon.getManufacturer() != null && balloon.getManufacturer().getName() == man.getName()}"
+                    th:each="man : ${manufacturers}"
+                    th:value="${man.getId()}"
+                    th:text="${man.getName()}">
+            </option>
+            <option th:if="${balloon} == null"
+                    th:each="man : ${manufacturers}"
+                    th:value="${man.getId()}"
+                    th:text="${man.getName()}">
+            </option>
+        </select>
+        <a href="/balloons/manufacturers/add-form">Add new Manufacturer</a>
+    </div>
+    <input name="id" type="hidden" th:value="(${balloon} != null ? ${balloon.getId()} : 0)">
+    <button type="submit" >Submit</button>
+    <a type="button" href="/balloons">Back</a>
+</form>
+</body>
+</html>

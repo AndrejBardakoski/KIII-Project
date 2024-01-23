@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>User orders</title>
+    <style type="text/css">
+        body {
+            width: 800px;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1 >All your orders</h1>
+</header>
+<main>
+        <table>
+            <thead>
+            <tr>
+                <th scope="col">Balloon name</th>
+                <th scope="col">Balloon size</th>
+                <th scope="col">Client Name</th>
+<!--                <th scope="col">Client Address</th>-->
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="userOrder: ${session.cart.getOrders()}">
+<!--            <tr th:each="userOrder: ${orders}">-->
+                <td th:text="${userOrder.getBalloonColor()}"></td>
+                <td th:text="${userOrder.getBalloonSize()}"></td>
+                <td th:text="${userOrder.getUser().getUsername()}"></td>
+<!--                <td th:text="${userOrder.getClientAddress()}"></td>-->
+            </tr>
+            </tbody>
+        </table>
+    <a href="/balloons">New order</a>
+    <br/>
+</main>
+</body>
+</html>

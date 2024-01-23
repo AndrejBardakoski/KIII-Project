@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Balloon Order page - Welcome and choose a Balloon</title>
+    <style type="text/css">
+        body {
+            width: 800px;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Welcome to our Balloon Shop App</h1>
+</header>
+<main>
+    <h2>Choose balloon color:</h2>
+    <div th:if="${hasError}">
+        <div th:text="${error}" style="color: red"></div>
+    </div>
+    <div>
+        Total number of deleted balloons
+        <span th:text="${numDeletedBalloons}"></span>
+    </div>
+    <form id="SearchForm" action="/balloons" method="post">
+        <input type="text" name="keyword">
+        <input type="submit" value="Search">
+    </form>
+    <form id=mainForm method="post" action="/"></form>
+    <div th:each="balloon: ${balloons}">
+        <input type="radio" name="color" th:form="mainForm" th:value="${balloon.getName()}">
+        <th:block th:text="${balloon.getName()}"/>
+        (
+        <block th:text="${balloon.getDescription()}"/>
+        ) manufacturer:
+        <block th:text="${balloon.getManufacturer().getName()}"/>
+        <form style="display: inline-block" th:action="@{'/balloons/delete/{id}' (id=${balloon.getId()})}"
+              th:method="DELETE">
+            <button type="submit"><i>Delete</i></button>
+        </form>
+        <a th:href="@{'/balloons/edit-form/{id}' (id=${balloon.getId()})}"><i>Edit</i></a>
+    </div>
+    <div>
+        <a href="/balloons/add-form">Add new product</a>
+    </div>
+    <input form="mainForm" type='submit' value='Submit'/>
+    <br/>
+</main>
+</body>
+</html>

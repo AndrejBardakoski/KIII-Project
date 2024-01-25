@@ -28,6 +28,7 @@ spec:
       containers:
         - name: spring-boot-app-pod
           image: andre102/balloon_app:latest
+          imagePullPolicy: Always
           env:
             - name: SPRING_DATASOURCE_URL
               valueFrom:

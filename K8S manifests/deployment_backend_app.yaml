@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-boot-app-deploy
+  namespace: kiii-project
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      project: kiii_project
+      title: balloon_app
+      framework: spring_boot
+  revisionHistoryLimit: 3
+#  progressDeadlineSeconds: 300
+#  minReadySeconds: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        project: kiii_project
+        title: balloon_app
+        framework: spring_boot
+    spec:
+      containers:
+        - name: spring-boot-app-pod
+          image: andre102/balloon_app:latest
+          env:
+            - name: SPRING_DATASOURCE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config-map
+                  key: db_url
+            - name: SPRING_DATASOURCE_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config-map
+                  key: db_user
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: db_password
+          ports:
+            - containerPort: 8080

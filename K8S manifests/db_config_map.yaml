@@ -1,0 +1,9 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  namespace: kiii-project
+  name: db-config-map
+data:
+  db_user: postgres
+  db_name: postgres
+  db_url: jdbc:postgresql://postgresql-database-sts-0.postgresql-database-service.kiii-project.svc.cluster.local:5432/postgres

@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgresql-database-sts
+  namespace: kiii-project
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      database: postgreSQL
+      project: kiii_project
+  serviceName: "postgresql-database-service"
+  template:
+    metadata:
+      labels:
+        project: kiii_project
+        database: postgreSQL
+    spec:
+      #      terminationGracePeriodSeconds: 10
+      containers:
+        - name: postgresql-database-pod
+          image: postgres:latest
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config-map
+                  key: db_name
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config-map
+                  key: db_user
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: db_password
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: postgresql-database-volume-claim
+              mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+    - metadata:
+        name: postgresql-database-volume-claim
+        namespace: kiii-project
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        storageClassName: local-path
+        resources:
+          requests:
+            storage: 1Gi

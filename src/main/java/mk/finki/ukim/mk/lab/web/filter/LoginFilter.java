@@ -1,7 +1,5 @@
 package mk.finki.ukim.mk.lab.web.filter;
 
-import mk.finki.ukim.mk.lab.model.User;
-
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.Cookie;
@@ -23,9 +21,13 @@ public class LoginFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
-//        User user = (User)request.getSession().getAttribute("user");
-        String user = Arrays.stream(request.getCookies()).filter(cookie -> cookie.getName().equals("user-id"))
-                .map(Cookie::getValue).findFirst().orElse(null);
+        Cookie[] cookies = request.getCookies();
+        String user = null;
+        if (cookies != null) {
+            user = Arrays.stream(cookies).filter(cookie -> cookie.getName().equals("user-id"))
+                    .map(Cookie::getValue).findFirst().orElse(null);
+        }
+
         String path = request.getServletPath();
 
         if (!"/login".equals(path) && !"/register".equals(path) && !"/main.css".equals(path) && user == null) {

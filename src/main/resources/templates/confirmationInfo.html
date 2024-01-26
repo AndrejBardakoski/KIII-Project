@@ -41,6 +41,10 @@
       <td th:text="${ipAddress}"></td>
     </tr>
     <tr>
+      <td><b>Server IP Address</b></td>
+      <td th:text="${srvIpAddress}"></td>
+    </tr>
+    <tr>
       <td><b>Client Browser</b></td>
       <td th:text="${clientAgent}"></td>
     </tr>
@@ -56,7 +60,7 @@
   <form method="post">
     <input type="submit" value="Log out">
   </form>
-  <a href="/balloons/orders">View orders</a>
+  <a href="/balloons">return to balloons</a>
 
 
 </section>

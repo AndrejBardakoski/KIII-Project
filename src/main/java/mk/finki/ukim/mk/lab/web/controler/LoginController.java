@@ -8,7 +8,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("/login")
@@ -26,12 +28,16 @@ public class LoginController {
     }
 
     @PostMapping
-    public String login(HttpServletRequest request, Model model) {
+    public String login(HttpServletRequest request, HttpServletResponse response, Model model) {
         User user = null;
         try {
             user = this.authService.login(request.getParameter("username"),
                     request.getParameter("password"));
-            request.getSession().setAttribute("user", user);
+
+            Cookie userIDCookie = new Cookie("user-id", user.getId().toString());
+            userIDCookie.setMaxAge(3600);
+            response.addCookie(userIDCookie);
+//            request.getSession().setAttribute("user", user);
             return "redirect:/balloons";
         } catch (InvalidUserCredentialsException exception) {
             model.addAttribute("hasError", true);

@@ -11,6 +11,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
+import java.net.InetAddress;
 
 @WebServlet(name = "ConfirmationInfoServlet", value = "/ConfirmationInfo")
 public class ConfirmationInfoServlet extends HttpServlet {
@@ -25,18 +26,19 @@ public class ConfirmationInfoServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 //        response.sendRedirect("");
-        HttpSession session = request.getSession();
-        Order order = (Order) session.getAttribute("order");
-        User user = (User) session.getAttribute("user");
+//        HttpSession session = request.getSession();
+//        Order order = (Order) session.getAttribute("order");
+//        User user = (User) session.getAttribute("user");
         WebContext context = new WebContext(request, response, request.getServletContext());
         context.setVariable("ipAddress",request.getRemoteAddr());
         context.setVariable("clientAgent",request.getHeader("User-Agent"));
-        if (order != null) {
-            context.setVariable("color", order.getBalloonColor());
-            context.setVariable("size", order.getBalloonSize());
-            context.setVariable("name", order.getUser().getUsername());
-//            context.setVariable("address", order.getClientAddress());
-        }
+        context.setVariable("srvIpAddress",InetAddress.getLocalHost().getHostAddress());
+//        if (order != null) {
+//            context.setVariable("color", order.getBalloonColor());
+//            context.setVariable("size", order.getBalloonSize());
+//            context.setVariable("name", order.getUser().getUsername());
+////            context.setVariable("address", order.getClientAddress());
+//        }
         this.springTemplateEngine.process("confirmationInfo.html", context, response.getWriter());
     }
 
@@ -55,6 +57,9 @@ public class ConfirmationInfoServlet extends HttpServlet {
 //        context.setVariable("order", order);
 //        this.springTemplateEngine.process("confirmationInfo.html", context, response.getWriter());
 
+        Cookie deleteServletCookie = new Cookie("user-id", null);
+        deleteServletCookie.setMaxAge(0);
+        response.addCookie(deleteServletCookie);
         HttpSession session = request.getSession();
         session.invalidate();
         response.sendRedirect("/balloons");

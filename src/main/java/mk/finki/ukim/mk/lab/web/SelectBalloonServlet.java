@@ -24,9 +24,9 @@ public class SelectBalloonServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String balloonSize = request.getParameter("size");
-        HttpSession session = request.getSession();
-        session.setAttribute("size",balloonSize);
+//        String balloonSize = request.getParameter("size");
+//        HttpSession session = request.getSession();
+//        session.setAttribute("size",balloonSize);
         response.sendRedirect("/BalloonOrder.do");
     }
 }

@@ -1,7 +1,5 @@
 package mk.finki.ukim.mk.lab.web.controler;
 
-import mk.finki.ukim.mk.lab.model.Manufacturer;
-import mk.finki.ukim.mk.lab.service.BalloonService;
 import mk.finki.ukim.mk.lab.service.ManufacturerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

@@ -22,16 +22,17 @@ public class BalloonListServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        WebContext context = new WebContext(request, response, request.getServletContext());
-        context.setVariable("balloons", balloonService.listAll());
-        this.springTemplateEngine.process("listBalloons.html", context, response.getWriter());
+//        WebContext context = new WebContext(request, response, request.getServletContext());
+//        context.setVariable("balloons", balloonService.listAll());
+//        this.springTemplateEngine.process("listBalloons.html", context, response.getWriter());
+        response.sendRedirect("/balloons");
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String balloonColor = request.getParameter("color");
-        HttpSession session = request.getSession();
-        session.setAttribute("color",balloonColor);
+//        String balloonColor = request.getParameter("color");
+//        HttpSession session = request.getSession();
+//        session.setAttribute("color",balloonColor);
         response.sendRedirect("/selectBalloon");
     }
 }

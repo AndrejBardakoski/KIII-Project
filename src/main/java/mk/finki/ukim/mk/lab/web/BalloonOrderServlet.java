@@ -15,6 +15,7 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @WebServlet(name = "BalloonOrderServlet", value = "/BalloonOrder.do")
@@ -34,8 +35,11 @@ public class BalloonOrderServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         WebContext context = new WebContext(request, response, request.getServletContext());
-        HttpSession session = request.getSession();
-        User user = (User)session.getAttribute("user");
+//        HttpSession session = request.getSession();
+//        User user = (User)session.getAttribute("user");
+        Long userId = Arrays.stream(request.getCookies()).filter(cookie -> cookie.getName().equals("user-id")).findFirst()
+                .map(cookie -> Long.parseLong(cookie.getValue())).orElse(null);
+        User user = userService.findById(userId);
 
 
         List<User> allUsers = this.userService.findAll();
@@ -46,7 +50,7 @@ public class BalloonOrderServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HttpSession session = request.getSession();
+//        HttpSession session = request.getSession();
 
 //        String clientName = request.getParameter("clientName");
         Long userId = Long.parseLong(request.getParameter("UserOrder"));
@@ -56,18 +60,19 @@ public class BalloonOrderServlet extends HttpServlet {
         User user = (User) userService.findById(userId);
 
 
-        String color = (String) session.getAttribute("color");
-        String size = (String) session.getAttribute("size");
-        Order currentOrder = orderService.placeOrder(color, size,user);
+//        String color = (String) session.getAttribute("color");
+//        String size = (String) session.getAttribute("size");
+        Order currentOrder = orderService.placeOrder("","",user);
 //        List<Order> orders = (List<Order>) session.getAttribute("userOrders");
-        ShoppingCart cart = (ShoppingCart) session.getAttribute("cart");
+//        ShoppingCart cart = (ShoppingCart) session.getAttribute("cart");
+        ShoppingCart cart = null;
         if(cart==null){
             cart = shoppingCartService.createShoppingCart(user);
         }
         shoppingCartService.addOrderToShoppingCart(cart.getId(),currentOrder.getId());
 //        orders.add(currentOrder);
-        session.setAttribute("order", currentOrder);
-        session.setAttribute("cart", cart);
+//        session.setAttribute("order", currentOrder);
+//        session.setAttribute("cart", cart);
         response.sendRedirect("/ConfirmationInfo");
     }
 }

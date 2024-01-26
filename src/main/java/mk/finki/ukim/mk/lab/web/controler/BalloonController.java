@@ -2,9 +2,7 @@ package mk.finki.ukim.mk.lab.web.controler;
 
 import mk.finki.ukim.mk.lab.model.Balloon;
 import mk.finki.ukim.mk.lab.model.Manufacturer;
-import mk.finki.ukim.mk.lab.model.User;
 import mk.finki.ukim.mk.lab.model.exceptions.BalloonNotFoundException;
-import mk.finki.ukim.mk.lab.model.exceptions.InvalidUserCredentialsException;
 import mk.finki.ukim.mk.lab.model.exceptions.ManufacturerNotFoundException;
 import mk.finki.ukim.mk.lab.service.AuthService;
 import mk.finki.ukim.mk.lab.service.BalloonService;
@@ -13,8 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -103,27 +99,6 @@ public class BalloonController {
         model.addAttribute("balloons", balloons);
         return "listBalloons";
     }
-
-//    @GetMapping("/login")
-//    public String loginGet() {
-//        return "login";
-//    }
-//
-//    @PostMapping("/login")
-//    public String loginPost(Model model, @RequestParam String username, @RequestParam String password,
-//                            HttpSession session) {
-//        User user = null;
-//        try {
-//            user = authService.login(username, password);
-//        } catch (InvalidUserCredentialsException ex) {
-//            model.addAttribute("hasError", true);
-//            model.addAttribute("error", ex.getMessage());
-//            return "login";
-//        }
-//        session.setAttribute("user", user);
-//        return "redirect:/balloons";
-//    }
-
 
 }
 

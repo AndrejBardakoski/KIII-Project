@@ -4,7 +4,7 @@ metadata:
   name: spring-boot-app-deploy
   namespace: kiii-project
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       project: kiii_project

@@ -12,7 +12,3 @@ spec:
     framework: spring_boot
     project: kiii_project
     title: balloon_app
-#    matchLabels:
-#      project: kiii_project
-#      title: balloon_app
-#      framework: spring_boot

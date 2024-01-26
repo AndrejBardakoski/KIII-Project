@@ -1,39 +1,52 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
-  name: postgresql-database-slave-sts
+  name: postgresql-database-master-deployment
   namespace: kiii-project
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      database: postgreSQL
+      database: master
       project: kiii_project
-  serviceName: "postgresql-database-slave-service"
+  revisionHistoryLimit: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
   template:
     metadata:
       labels:
+        database: master
         project: kiii_project
-        database: postgreSQL
     spec:
       containers:
-        - name: postgresql-database-slave-pod
+        - name: postgresql-database-master-pod
           image: bitnami/postgresql:latest
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: postgresql-master-data
+              mountPath: /var/lib/postgresql/data
           env:
             - name: POSTGRESQL_REPLICATION_MODE
-              value: slave
-            - name: POSTGRESQL_MASTER_PORT_NUMBER
-              value: "5432"
+              value: master
             - name: POSTGRESQL_REPLICATION_USER
               valueFrom:
                 configMapKeyRef:
                   name: db-config-map
                   key: db_replica_user
-            - name: POSTGRESQL_MASTER_HOST
+            - name: POSTGRESQL_USERNAME
               valueFrom:
                 configMapKeyRef:
                   name: db-config-map
-                  key: db_master_host
+                  key: db_user
+            - name: POSTGRESQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  name: db-config-map
+                  key: db_name
             - name: POSTGRESQL_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -44,18 +57,7 @@ spec:
                 secretKeyRef:
                   name: db-secret
                   key: db_replica_password
-          ports:
-            - containerPort: 5432
-          volumeMounts:
-            - name: postgresql-database-volume-claim
-              mountPath: /var/lib/postgresql/data
-  volumeClaimTemplates:
-    - metadata:
-        name: postgresql-database-volume-claim
-        namespace: kiii-project
-      spec:
-        accessModes: [ "ReadWriteOnce" ]
-        storageClassName: local-path
-        resources:
-          requests:
-            storage: 1Gi
+      volumes:
+        - name: postgresql-master-data
+          persistentVolumeClaim:
+            claimName: postgresql-database-master-pvc

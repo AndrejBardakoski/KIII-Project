@@ -6,4 +6,6 @@ metadata:
 data:
   db_user: postgres
   db_name: postgres
-  db_url: jdbc:postgresql://postgresql-database-sts-0.postgresql-database-service.kiii-project.svc.cluster.local:5432/postgres
+  db_url: jdbc:postgresql://postgresql-database-master-service.kiii-project.svc.cluster.local:5432/postgres
+  db_replica_user: repl_user
+  db_master_host: postgresql-database-master-service.kiii-project.svc.cluster.local

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgresql-database-slave-service
+  namespace: kiii-project
+  labels:
+    database: postgreSQL
+    project: kiii_project
+spec:
+  clusterIP: None
+  ports:
+    - port: 5432
+      targetPort: 5432
+  selector:
+    database: postgreSQL
+    project: kiii_project

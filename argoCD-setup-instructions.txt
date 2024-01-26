@@ -6,8 +6,7 @@ kubectl port-forward svc/argocd-server -n argocd 8080:443
 login
 username: admin
 password:
-    kubectl describe secret argocd-initial-admin-secret -n argocd -o yaml
+    kubectl get secret argocd-initial-admin-secret -n argocd -o yaml
     https://www.base64decode.org/
-
 
 kubectl apply -f application.yaml
